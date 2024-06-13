@@ -96,6 +96,15 @@
 <section class="section">
   <div class="container">
     <h2 class="title is-2" style="text-align: center;">Autonomous Tasks</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            The videos below show results for the policy trained using the hybrid-relative action representation, unless otherwise noted.
+          </p>
+        </div>
+      </div>
+    </div>
     <div class="columns is-centered">
       <div class="column is-three-fifths is-centered has-text-centered">
         <video controls autoplay loop muted playsinline src="./resources/tasks/davinci_manipulation_v2_m1.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
@@ -163,6 +172,40 @@
     <div class="columns is-centered">
       <div class="column is-three-fifths is-centered has-text-centered">
         <video controls autoplay loop muted playsinline src="./resources/tasks/davinci_manipulation_v2_m12.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-2" style="text-align: center;">Baseline Results</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            The videos below show results for policy trained using the camera-centric action representation, which is the baseline approach. 
+            The camera-centric action representation models policy actions as absolute end-effector poses with respect to the endoscope tip.
+            In other words, the end-effectors are trained to reach specific waypoints in the workspace. However, due to errors in the forward kinematics 
+            of the da Vinci arms, which change whenever the set-up joints are repositioned, this point is no longer the same point 
+            the model has seen durining training. All videos are 2X speed.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_knot_tying_camera_centric_issues_2x.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_needle_pickup_camera_centric_issues_2x.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_lift_tissue_camera_centric_issues.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
       </div>
     </div>
   </div>
