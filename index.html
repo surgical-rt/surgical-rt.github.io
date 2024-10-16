@@ -187,7 +187,7 @@
   </div>
 </section>
 
-<section class="section">
+<!-- <section class="section">
   <div class="container">
     <h2 class="title is-2" style="text-align: center;">Baseline Results</h2>
     <div class="columns is-centered has-text-centered">
@@ -219,7 +219,150 @@
       </div>
     </div>
   </div>
+</section> -->
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-2" style="text-align: center;">Overview</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            We explore whether surgical manipulation tasks can be learned on the da Vinci Research Kit (dVRK) system via imitation learning.
+            We consider three tasks for automation, including lifting tissue, needle pickup and handover, and suture knot-tying, as shown below. We also
+            explore the use of wrist cameras and evaluate their impact on performance.
+          </p>
+          <!-- Example of how to insert an image -->
+          <img src="resources/imgs/intro_fig.jpg" alt="Descriptive text about the image" style="max-width: 100%; height: auto;">
+          <!-- You can add more <img> tags as needed -->
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            However, robot learning on the da Vinci presents unique challenges. The hardware suffers from inaccurate forward kinematics due 
+            to potentiometer-based joint measurements, hysteresis, and overall flexibility and slack in its mechanism. 
+            These limitations result in the robot's failure to perform simple visual-servoing tasks 
+            (see <a href="https://sites.google.com/berkeley.edu/surgical-calibration">[1]</a> 
+            , <a href="https://arxiv.org/abs/2210.13598">[2]</a>). As we discover in this work, 
+            naively training a policy using such approximate kinematic data almost always leads to task failure. For instance, a policy 
+            trained to output absolute end-effector poses, which is a common approach to train robot policies, achieves near-zero success 
+            rates across all tasks. 
+          </p>
+        </div>
+        
+        <!-- <div class="content has-text-justified">
+          <p>
+            More concretely, as shown below, each arm is a sequential combination of set-up joints which are passive, 
+            followed by active joints which are motorized. The passive joints are notoriously inaccurate due to using only potentiometers for joint
+            measurements. The active joints use both potentiometers and motor encoders, providing improved precision. However, in general, 
+            the use of potentiometers throughout all the joints causes the forward kinematics of the arms to be inaccurate, even up to 5cm error.
+          
+            Over the years, Intuitive has improved their design by adding better encoders to the set-up joints as well. However, the improvement
+            only affects the da Vinci Xi generation, while the past genertions, including da Vinci classic, S, and Si, remain affected.  
+          </p>
+          <img src="resources/imgs/robot_fig_v16.jpg" alt="Descriptive text about the image" style="max-width: 100%; height: auto;">
+        </div> -->
+        
+      </div>
+    </div>
+  </div>
 </section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-2" style="text-align: center;">Approach</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+          We find that the relative motion of the da Vinci system is much more consistent than its absolute forward kinematics.
+          We thus model policy actions as relative motion, and further explore its variants to design the most effective action
+          representation for the da Vinci. We consider three options as shown below: camera-centric, tool-centric, and hybrid-relative actions.
+          The camera-centric action representation is a baseline approach which models actions as absolute poses of the end-effectors with respect
+          to the endoscope tip. 
+          The other two are relative formulations defining actions with respect to the current tool (i.e. end-effector) frame or the endoscope tip frame.
+          </p>
+          <!-- Example of how to insert an image -->
+          <img src="resources/imgs/action_rep.jpg" alt="Descriptive text about the image" style="max-width: 100%; height: auto;">
+          <!-- You can add more <img> tags as needed -->
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            We then train a policy using images as input and the above action representations. We do not use
+            kinematics data as input as done in many prior works, since the kinematics data of the da Vinci can be unreliable.
+            We base our model on <a href="https://github.com/tonyzhaozh/act">ACT</a>, a transformer-based architecture.
+
+          </p>
+          <!-- Example of how to insert an image -->
+          <img src="resources/imgs/policy_fig.jpg" alt="Descriptive text about the image" style="max-width: 100%; height: auto;">
+          <!-- You can add more <img> tags as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-2" style="text-align: center;">Results</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+
+        <div class="content has-text-justified">
+          <p>
+          We first evaluate whether relative motion on the da Vinci is more consistent than its absolute forward kinematics.
+          This is evaluated by repeating a recorded reference trajectory using absolute vs relative action formulation under various robot configurations.
+          Overall, our experiments show that in the presence of joint measurement errors, relative motion is more consistent. 
+          Therefore, modeling policy actions as relative motion is a better choice. More experiment details and results can be found in the below
+          figure and table.
+          </p>
+          <!-- Example of how to insert an image -->
+          <img src="resources/imgs/repeatability_fig_captions.JPG" alt="Descriptive text about the image" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+          <img src="resources/imgs/table_repeatability.JPG" alt="Descriptive text about the image" style="max-width: 100%; height: auto; display: block; margin-left: auto; margin-right: auto;">
+          <!-- You can add more <img> tags as needed -->
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+          We also evaluate the task success rates of our models trained using the various action representations. 
+          Our results show that policies trained using relative action formulations perform well (tool-centric and hybrid-relative action representations),
+          while policies trained using absolute forward kinematics fail. The successful policy rollouts by the hybrid-relative action formulation is shown 
+          in the series of videos above. We also observe that wrist cameras can provide significant performance gains in learning surgical manipulation 
+          tasks.
+          </p>
+          <!-- Example of how to insert an image -->
+          <img src="resources/imgs/table_results.JPG" alt="Descriptive text about the image" style="max-width: 100%; height: auto;">
+          <!-- You can add more <img> tags as needed -->
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            The videos below show the results for policy trained using the absolute forward kinematics of the arms (camera-centric actions), which is the baseline approach.
+            Due to the errors in the da Vinci arm foward kinematics, which can change significantly between training and inference,
+            the policies fail to complete the tasks. All videos are 2X speed.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_knot_tying_camera_centric_issues_2x.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_needle_pickup_camera_centric_issues_2x.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths is-centered has-text-centered">
+        <video controls autoplay loop muted playsinline src="./resources/tasks/ACT_lift_tissue_camera_centric_issues.mp4" poster="./resources/loading-icon.gif" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 </body>
 </html>
